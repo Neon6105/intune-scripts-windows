@@ -14,7 +14,7 @@ Param(
 - Copy this script to C:\ProgramData\Scripts\
 - Create a scheduled task to run this script as the required user
   - e.g., Program/script: powershell.exe
-          Add arguments : -NoProfile -ExecutionPolicy Bypass -File "C:\ProgramData\Scripts\Watch-Process.ps1" -Name "ProcessName" -FilePath "C:\Path\To\ProcessName.exe"
+          Add arguments : -NoProfile -ExecutionPolicy Bypass -File "C:\ProgramData\Scripts\Watch-Process.ps1" -FilePath "C:\Path\To\ProcessName.exe"
 
 Note: Do not use the -Seconds parameter when unattended! It is for interactive use only.
 #>
@@ -56,12 +56,14 @@ function Watchdog() {
 }
 
 
+# Notify of continuous monitoring if $Seconds are >= 1; else run once
 If ($Seconds -ge 1) {
   Write-Output "Running continuously every $Seconds seconds. Use CTRL+C to break."
 } else {
   Watchdog
 }
 
+# Continuous monitoring because $Seconds are >= 1
 While ($Seconds -ge 1) {
   Watchdog
   Start-Sleep -Seconds $Seconds
