@@ -44,8 +44,9 @@ If ($PxService) {
   try {
     Write-Verbose "sc delete $PX"
     Start-Process -FilePath "$((Get-Command -Name sc).Source)" -ArgumentList "delete $PX" -NoNewWindow -Wait
+    Write-Output "$PX service deleted. A restart is required."
   } catch {
-    $ErrorMsg = $_.ErrorDetails.Message
+    $ErrorMsg = $_.Exception.Message
     Write-Error "$ErrorMsg"
   }
 } Else {
@@ -61,7 +62,7 @@ ForEach ($FilePath in $FilePaths) {
         Remove-Item -Path "$ThisFile" -Force -Confirm:$False
         Write-Output "SUCCESS: Eliminated $ThisFile"
       } catch {
-        $ErrorMsg = $_.ErrorDetails.Message
+        $ErrorMsg = $_.Exception.Message
         Write-Error "$ErrorMsg"
       }
     } Else {
